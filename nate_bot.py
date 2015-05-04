@@ -1,11 +1,17 @@
 import tweepy, time, sys
- 
+
+def read_file(argfile):
+    filename = open(argfile, 'r')
+    f = filename.readlines()
+    filename.close()
+    return f
+
 argfile = str(sys.argv[1])
 credential_arg = str(sys.argv[2])
 
-credentials = open(credential_arg, 'r')
-cred = credentials.readlines()
-credentials.close()
+tweets_replied_to = "TWITTER TWEET IDS.txt"
+
+cred = read_file(credential_arg)
 
 CONSUMER_KEY = cred[0].rstrip('\n')
 CONSUMER_SECRET = cred[1].rstrip('\n')
@@ -16,48 +22,92 @@ auth.set_access_token(ACCESS_TOKEN, ACCESS_SECRET)
 api = tweepy.API(auth)
 
 
-filename = open(argfile,'r')
-f = filename.readlines()
-filename.close()
 
-def post_status(f):
+def delete_line(argfile, del_line):
+    filename = open(argfile, 'r+')
+    f = filename.readlines()
+    filename.seek(0)
     for line in f:
-        try:
-            post_replies(f)
-            api.update_status(status=line)
-        except tweepy.error.TweepError:
-            print "ERROR: Duplicate Tweet"
-        time.sleep(30)#Tweet every 3 hours
+        if line != del_line:
+            filename.write(line)
+    filename.truncate()
+    filename.close()
+
+
+def post_status():
+    f = read_file(argfile)
+    try:
+        api.update_status(status=f[0])
+        delete_line(argfile, f[0])
+    except tweepy.error.TweepError:
+        print "ERROR: Duplicate Tweet"
+
+    #for line in f:
+    #    try:
+    #        api.update_status(status=line)
+    #        delete_line(argfile, line)
+    #    except tweepy.error.TweepError:
+    #        print "ERROR: Duplicate Tweet"
+    #    time.time.sleep(900) # Sleep for 10 minutes
 
 def get_timeline():
     for status in tweepy.Cursor(api.user_timeline).items():
         print status
 
 def get_search_mentions():
+    replied = read_file(tweets_replied_to)
     users = []
-    mentions = api.mentions_timeline(count=5)
+    mentions = api.mentions_timeline(count=100)
     for m in mentions: 
-        users.append(m.user.screen_name)
+        tweet_id = str(m.id) + '\n'
+        if tweet_id not in replied:
+            users.append(m.user.screen_name)
+            name = open(tweets_replied_to, 'a+')
+            name.write(tweet_id)
+            name.close()
     return users
 
 
-def post_replies(f):
+def post_replies():
+    f = read_file(argfile)
     users = get_search_mentions()
     for i in users:
-        tweet = "@%s %s" % (i, f[-1])
+        tweet = "@%s %s" % (i, f[0])
+        delete_line(argfile, f[0])
         try:
             api.update_status(status = tweet)
         except tweepy.error.TweepError:
             print "ERROR: Duplicate Tweet"
 
-post_status(f)
+def post():
+    post_status()
+    post_replies()
+    time.sleep(900)
+    post_replies()
+    time.sleep(900)
+    post_replies()
+    time.sleep(900)
+    post_replies()
+    time.sleep(900)
+    post_replies()
+    time.sleep(900)
+    post_replies()
+    time.sleep(900)
+    post_replies()
+    time.sleep(900)
+    post_replies()
+    time.sleep(900)
+    post_replies()
+    time.sleep(900)
+    post_replies()
+    time.sleep(900)
+    post_replies()
+    time.sleep(900)
+    post_replies()
+    time.sleep(900)
 
-#def main():
-    #get_timeline()
-#    print get_search_mentions()
-#    post_replies(f)
-#    post_status(f)
+def main():
+    post()
 
- #   if __name__ == "__main__":
- #       main()
-
+if __name__ == "__main__":
+    main()
