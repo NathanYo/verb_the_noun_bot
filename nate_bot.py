@@ -125,21 +125,10 @@ def post(): #There's probably a cleaner way to do this...
     post_replies()
     post_direct_message()
     time.sleep(90)
-    post_replies()
-    post_direct_message()
-    time.sleep(90)
-    post_replies()
-    post_direct_message()
-    time.sleep(90)
-    post_replies()
-    post_direct_message()
-    time.sleep(90)
-    post_replies()
-    post_direct_message()
-    time.sleep(90)
-
+    
 def main():
-    post()
+    while True:
+        post()
 
 if __name__ == "__main__":
     main()
