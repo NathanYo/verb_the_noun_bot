@@ -6,10 +6,10 @@ This program uses the Tweepy library for Python. To install, just do
         
         pip install tweepy
 
-# sort.py
-This program sorts through a list of verbs and nouns found at http://wordlist.aspell.net/12dicts/ which is the 2of12id.txt file. It writes all nouns to a noun text file, and all verbs to a verb text file. The usage of this script is:
+# linear_search.py
+This program performs a linear search through a list of verbs and nouns found at http://wordlist.aspell.net/12dicts/ which is the 2of12id.txt file. It writes all nouns to a noun text file, and all verbs to a verb text file. The usage of this script is:
         
-        python sort.py <FILE_IN> <VERB_OUT> <NOUN_OUT>
+        python linear_search.py <FILE_IN> <VERB_OUT> <NOUN_OUT>
 
 # jeremy_bot.py
 This program reads in a verb file, a noun file, and writes it to TWEET_ARCHIVE.txt and tweets.txt. The script only writes if the tweet does not exist in TWEET_ARCHIVE.txt. Usage:
